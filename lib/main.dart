@@ -1,6 +1,4 @@
-import 'dart:ffi';
 import 'quiz_brain.dart';
-
 import 'package:flutter/material.dart';
 
 QuizBrain quizBrain = QuizBrain();
@@ -8,9 +6,6 @@ QuizBrain quizBrain = QuizBrain();
 void main() => runApp(Quizzler());
 
 class Quizzler extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -36,9 +31,20 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
 
+  void checkAnswer(bool userPickedAnswer){
+    bool correctAnswer = quizBrain.getQuestionAnswer();
+    setState(() {
+    if (userPickedAnswer == correctAnswer) {
+      scoreKeeper.add(Icon(Icons.check,color: Colors.green));
+    }else{
+      scoreKeeper.add(Icon(Icons.close,color: Colors.red));
+    }
+
+      quizBrain.nextQuestion();
+    });
+  }
 
 
-  int questionNumber = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -51,7 +57,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.questionsBank[questionNumber].questionText,
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -79,10 +85,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizBrain.questionsBank[questionNumber].questionAnswer;
-                  setState(() {
-                    questionNumber++;
-                  });
+                checkAnswer(true);
                 //The user picked true.
               },
             ),
@@ -103,9 +106,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  questionNumber++;
-                });
+                checkAnswer(false);
                 //The user picked false.
               },
             ),
