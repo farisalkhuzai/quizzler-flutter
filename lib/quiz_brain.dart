@@ -27,11 +27,21 @@ class QuizBrain{
       _questionNumber++;
     }
   }
-
+  bool isFinished(){
+    if (_questionNumber >= _questionsBank.length - 1){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  void resetQuestionNumber(){
+    _questionNumber = 0;
+  }
   String getQuestionText(){
     return _questionsBank[_questionNumber].questionText;
   }
   bool getQuestionAnswer(){
     return _questionsBank[_questionNumber].questionAnswer;
   }
+
 }
